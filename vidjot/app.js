@@ -1,23 +1,31 @@
 const express = require('express');
+const exphbs = require ('express-handlebars');
 
 const app = express();
 
+//Handlebars Middleware
+app.engine('handlebars', exphbs({
+  defaultLayout: 'main'
+}));
+app.set('view engine', 'handlebars');
+
 // How middleware works
-app.use(function(request, response, next){
-  // console.log(Date.now());
-  request.name = 'Brian Baccarella';
-  next();
-});
+// app.use(function(request, response, next){
+//   request.name = 'Brian Baccarella';
+//   next();
+// });
 
 //Index Route
 app.get('/', (request, response) => {
-  console.log(request.name);
-  response.send(request.name);
+  const title = 'Welcome to my first node.js app'
+  response.render('index', {
+    title: title
+  });
 });
 
 //About Route
 app.get('/about', (request, response) => {
-  response.send('This is an about page');
+  response.render('about');
 });
 
 const port = 5000;
