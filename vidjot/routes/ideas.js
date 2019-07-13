@@ -1,87 +1,94 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 
+// Load Idea Model
+require('../models/Idea');
+const Idea = mongoose.model('ideas');
+
 // Idea Index Page
-router.get('/', (request, response) => {
+router.get('/', (req, res) => {
   Idea.find({})
     .sort({date:'desc'})
     .then(ideas => {
-      response.render('ideas/index', {
+      res.render('ideas/index', {
         ideas:ideas
       });
-    })
+    });
 });
 
 // Add Idea Form
-router.get('/add', (request, response) => {
-  response.render('ideas/add');
+router.get('/add', (req, res) => {
+  res.render('ideas/add');
 });
 
-// Edit Idea Form: id represents a parameter
-router.get('/edit/:id', (request, response) => {
+// Edit Idea Form
+router.get('/edit/:id', (req, res) => {
   Idea.findOne({
-    _id: request.params.id
+    _id: req.params.id
   })
   .then(idea => {
-    response.render('/edit', {
-      idea: idea
-    })
-  })
+    res.render('ideas/edit', {
+      idea:idea
+    });
+  });
 });
 
-// Add Process Form
-router.post('/', (request, response) => {
+// Process Form
+router.post('/', (req, res) => {
   let errors = [];
-  if (!request.body.title) {
-    errors.push({text:'Please add a title'})
+
+  if(!req.body.title){
+    errors.push({text:'Please add a title'});
   }
-  if (!request.body.details) {
-    errors.push({text:'Please add some details'})
+  if(!req.body.details){
+    errors.push({text:'Please add some details'});
   }
-  if(errors.length) {
-    response.render('/add', {
+
+  if(errors.length > 0){
+    res.render('/add', {
       errors: errors,
-      title: request.body.title,
-      details: request.body.details
+      title: req.body.title,
+      details: req.body.details
     });
   } else {
     const newUser = {
-      title: request.body.title,
-      details: request.body.details
+      title: req.body.title,
+      details: req.body.details
     }
     new Idea(newUser)
       .save()
       .then(idea => {
-        request.flash('success_msg', 'Video idea added');
-        response.redirect('/');
+        req.flash('success_msg', 'Video idea added');
+        res.redirect('/ideas');
       })
   }
-})
+});
 
 // Edit Form process
-router.put('/:id', (request, response) => {
+router.put('/:id', (req, res) => {
   Idea.findOne({
-    _id: request.params.id
+    _id: req.params.id
   })
   .then(idea => {
-    // New values
-    idea.title = request.body.title;
-    idea.details = request.body.details;
+    // new values
+    idea.title = req.body.title;
+    idea.details = req.body.details;
 
     idea.save()
       .then(idea => {
-        request.flash('success_msg', 'Video idea updated');
-        response.redirect('');
+        req.flash('success_msg', 'Video idea updated');
+        res.redirect('/ideas');
       })
   });
 });
 
 // Delete Idea
-router.delete('/:id', (request, response) => {
-  Idea.remove({_id: request.params.id})
+router.delete('/:id', (req, res) => {
+  Idea.remove({_id: req.params.id})
     .then(() => {
-      request.flash('success_msg', 'Video idea removed');
-      response.redirect('/');
+      req.flash('success_msg', 'Video idea removed');
+      res.redirect('/ideas');
     });
 });
 
