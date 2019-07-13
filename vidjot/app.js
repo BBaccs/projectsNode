@@ -1,5 +1,6 @@
 const express = require('express');
 const exphbs = require ('express-handlebars');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const app = express();
@@ -19,13 +20,12 @@ const Idea = mongoose.model('ideas');
 app.engine('handlebars', exphbs({
   defaultLayout: 'main'
 }));
-app.set('view engine', 'handlebars');
 
-// How middleware works
-// app.use(function(request, response, next){
-//   request.name = 'Brian Baccarella';
-//   next();
-// });
+// Body parser middleware
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+app.set('view engine', 'handlebars');
 
 //Index Route
 app.get('/', (request, response) => {
@@ -39,6 +39,18 @@ app.get('/', (request, response) => {
 app.get('/about', (request, response) => {
   response.render('about');
 });
+
+// Add Idea Form
+app.get('/ideas/add', (request, response) => {
+  response.render('ideas/add');
+});
+
+// Process Form
+app.post('/ideas', (request, response) => {
+  console.log(request.body)
+  response.send('ok');
+})
+
 
 const port = 5000;
 
