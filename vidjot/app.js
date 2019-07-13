@@ -11,6 +11,10 @@ mongoose.connect('mongodb://localhost/vidjot-brian', {
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
+// Load Idea Model, we don't need idea.js, just idea will do.
+require('./models/Idea'); 
+const Idea = mongoose.model('ideas');
+
 //Handlebars Middleware
 app.engine('handlebars', exphbs({
   defaultLayout: 'main'
