@@ -47,8 +47,22 @@ app.get('/ideas/add', (request, response) => {
 
 // Process Form
 app.post('/ideas', (request, response) => {
-  console.log(request.body)
-  response.send('ok');
+  let errors = [];
+  if (!request.body.title) {
+    errors.push({text:'Please add a title'})
+  }
+  if (!request.body.details) {
+    errors.push({text:'Please add some details'})
+  }
+  if(errors.length) {
+    response.render('ideas/add', {
+      errors: errors,
+      title: request.body.title,
+      details: request.body.details
+    });
+  } else {
+    response.send('passed');
+  }
 })
 
 
