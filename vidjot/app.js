@@ -1,6 +1,8 @@
 const express = require('express');
 const exphbs = require ('express-handlebars');
 const methodOverride = require('method-override');
+const flash = require('connect-flash');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
@@ -30,6 +32,23 @@ app.use(bodyParser.json());
 app.use(methodOverride('_method'));
 
 app.set('view engine', 'handlebars');
+
+// Express session middleware
+app.use(session({ 
+  secret: 'secret', 
+  resave: true,
+  saveUninitialized: true,
+}));
+
+app.use(flash());
+
+// Global variables
+app.use(function(request, response, next){
+  response.locals.success_msg = request.flash('success_msg');
+  response.locals.error_msg = request.flash('error_msg');
+  response.locals.error = request.flash('error');
+  next();
+});
 
 //Index Route
 app.get('/', (request, response) => {
@@ -121,6 +140,7 @@ app.put('/ideas/:id', (request, response) => {
 app.delete('/ideas/:id', (request, response) => {
   Idea.remove({_id: request.params.id})
     .then(() => {
+      request.flash('success_msg', 'Video idea removed');
       response.redirect('/ideas');
     });
 });
