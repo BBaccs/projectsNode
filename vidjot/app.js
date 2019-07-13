@@ -101,8 +101,20 @@ app.post('/ideas', (request, response) => {
 })
 
 // Edit Form process
-app.put('/ideas/:id', (req, res) => {
-  res.send('PUT');
+app.put('/ideas/:id', (request, response) => {
+  Idea.findOne({
+    _id: request.params.id
+  })
+  .then(idea => {
+    // New values
+    idea.title = request.body.title;
+    idea.details = request.body.details;
+
+    idea.save()
+      .then(idea => {
+        response.redirect('/ideas');
+      })
+  })
 });
 
 const port = 5000;
