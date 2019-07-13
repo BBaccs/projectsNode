@@ -1,5 +1,6 @@
 const express = require('express');
 const exphbs = require ('express-handlebars');
+const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
@@ -22,8 +23,11 @@ app.engine('handlebars', exphbs({
 }));
 
 // Body parser middleware
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// Method override middleware
+app.use(methodOverride('_method'));
 
 app.set('view engine', 'handlebars');
 
@@ -40,9 +44,32 @@ app.get('/about', (request, response) => {
   response.render('about');
 });
 
+// Idea Index Page
+app.get('/ideas', (request, response) => {
+  Idea.find({})
+    .sort({date:'desc'})
+    .then(ideas => {
+      response.render('ideas/index', {
+        ideas:ideas
+      });
+    })
+});
+
 // Add Idea Form
 app.get('/ideas/add', (request, response) => {
   response.render('ideas/add');
+});
+
+// Edit Idea Form: id represents a parameter
+app.get('/ideas/edit/:id', (request, response) => {
+  Idea.findOne({
+    _id: request.params.id
+  })
+  .then(idea => {
+    response.render('ideas/edit', {
+      idea: idea
+    })
+  })
 });
 
 // Process Form
@@ -73,6 +100,10 @@ app.post('/ideas', (request, response) => {
   }
 })
 
+// Edit Form process
+app.put('/ideas/:id', (req, res) => {
+  res.send('PUT');
+});
 
 const port = 5000;
 
