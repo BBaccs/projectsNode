@@ -91,7 +91,7 @@ app.get('/ideas/edit/:id', (request, response) => {
   })
 });
 
-// Process Form
+// Add Process Form
 app.post('/ideas', (request, response) => {
   let errors = [];
   if (!request.body.title) {
@@ -114,6 +114,7 @@ app.post('/ideas', (request, response) => {
     new Idea(newUser)
       .save()
       .then(idea => {
+        request.flash('success_msg', 'Video idea added');
         response.redirect('/ideas');
       })
   }
@@ -131,6 +132,7 @@ app.put('/ideas/:id', (request, response) => {
 
     idea.save()
       .then(idea => {
+        request.flash('success_msg', 'Video idea updated');
         response.redirect('/ideas');
       })
   });
