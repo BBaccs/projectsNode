@@ -114,7 +114,15 @@ app.put('/ideas/:id', (request, response) => {
       .then(idea => {
         response.redirect('/ideas');
       })
-  })
+  });
+});
+
+// Delete Idea
+app.delete('/ideas/:id', (request, response) => {
+  Idea.remove({_id: request.params.id})
+    .then(() => {
+      response.redirect('/ideas');
+    });
 });
 
 const port = 5000;
