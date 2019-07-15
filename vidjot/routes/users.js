@@ -30,7 +30,7 @@ router.post('/register', (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
-      password: req.body.password2,
+      password2: req.body.password2,
     });
   } else {
     res.send('passed');
