@@ -80,4 +80,12 @@ router.post('/register', (req, res) => {
   }
 });
 
+
+// Logout User
+router.get('/logout', (req, res) => {
+  req.logout()
+  req.flash('success', 'You\'re loggeded out');
+  res.redirect('/users/login');
+});
+
 module.exports = router;
