@@ -7,10 +7,6 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
-// const connect = require('connect');
-// const http = require('http');
-
-// const connectApp = connect();
 
 const app = express();
 
@@ -50,16 +46,6 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
-
-// // Connect's Middleware
-// connectApp.use(function middleware1(req, res, next) {
-//   // middleware 1
-//   next();
-// });
-// connectApp.use(function middleware2(req, res, next) {
-//   // middleware 2
-//   next();
-// });
 
 // DEPRECATED Passport middleare
 app.use(passport.initialize());

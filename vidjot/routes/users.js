@@ -84,7 +84,7 @@ router.post('/register', (req, res) => {
 // Logout User
 router.get('/logout', (req, res) => {
   req.logout()
-  req.flash('success', 'You\'re loggeded out');
+  req.flash('success_msg', 'You\'ve signed out');
   res.redirect('/users/login');
 });
 
