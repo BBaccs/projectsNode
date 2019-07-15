@@ -7,7 +7,10 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
-const connect = connect();
+const connect = require('connect');
+const http = require('http');
+
+const connectApp = connect();
 
 const app = express();
 
@@ -49,11 +52,11 @@ app.use(session({
 }));
 
 // Connect's Middleware
-connect.use(function middleware1(req, res, next) {
+connectApp.use(function middleware1(req, res, next) {
   // middleware 1
   next();
 });
-connect.use(function middleware2(req, res, next) {
+connectApp.use(function middleware2(req, res, next) {
   // middleware 2
   next();
 });
