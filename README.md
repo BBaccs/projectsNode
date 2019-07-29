@@ -1,2 +1,2 @@
 # projectsNode
- practicing node.js
+practicing node.js, deployed with heroku
